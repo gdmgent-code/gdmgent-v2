@@ -33,3 +33,9 @@ Error: HTTP Error: 401, Request had invalid authentication credentials. Expected
 
 firebase logout
 
+FIREBASEAPIKEY: ""
+FIREBASEAUTHDOMAIN: ""
+FIREBASEDATABASEURL: ""
+FIREBASEPROJECTID: ""
+FIREBASESTORAGEBUCKET: ""
+FIREBASEMESSAGESENDERID: ""
