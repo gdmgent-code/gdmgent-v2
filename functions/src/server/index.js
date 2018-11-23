@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { ApolloServer, makeExecutableSchema, gql } from 'apollo-server-express';
+import { ApolloServer, makeExecutableSchema } from 'apollo-server-express';
 import { merge } from 'lodash';
 
 import apiRoutes from './api';
@@ -10,6 +10,7 @@ import {
   typeDef as Query, 
   resolvers as queryResolvers,
 } from './graphql/query';
+import { empty } from 'apollo-link';
 
 /*
 Cors
@@ -43,10 +44,16 @@ const schema = makeExecutableSchema({
 });
 
 const apolloServer = new ApolloServer({ 
-  schema
+  schema: schema,
+  playground: {
+    endpoint: '/graphql',
+    settings: {
+      'editor.theme': 'light'
+    }
+  },
 });
 // app.use(path, jwtCheck);
-apolloServer.applyMiddleware({ app });
+apolloServer.applyMiddleware({ app: app, path: '/graphql' });
 
 /*
 Error

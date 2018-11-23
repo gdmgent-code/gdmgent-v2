@@ -21,6 +21,8 @@ var _api = _interopRequireDefault(require("./api"));
 
 var _query = require("./graphql/query");
 
+var _apolloLink = require("apollo-link");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*
@@ -56,11 +58,18 @@ const schema = (0, _apolloServerExpress.makeExecutableSchema)({
   resolvers: (0, _lodash.merge)(resolvers, _query.resolvers)
 });
 const apolloServer = new _apolloServerExpress.ApolloServer({
-  schema
+  schema: schema,
+  playground: {
+    endpoint: '/graphql',
+    settings: {
+      'editor.theme': 'light'
+    }
+  }
 }); // app.use(path, jwtCheck);
 
 apolloServer.applyMiddleware({
-  app
+  app: app,
+  path: '/graphql'
 });
 /*
 Error
