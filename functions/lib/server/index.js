@@ -11,7 +11,15 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
+var _path = _interopRequireDefault(require("path"));
+
+var _apolloServerExpress = require("apollo-server-express");
+
+var _lodash = require("lodash");
+
 var _api = _interopRequireDefault(require("./api"));
+
+var _query = require("./graphql/query");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38,6 +46,26 @@ app.use(_bodyParser.default.urlencoded({
   extended: true
 }));
 app.use('/api', _api.default);
+/*
+Apollo Server (GraphQL)
+*/
+
+const resolvers = {};
+const schema = (0, _apolloServerExpress.makeExecutableSchema)({
+  typeDefs: [_query.typeDef],
+  resolvers: (0, _lodash.merge)(resolvers, _query.resolvers)
+});
+const apolloServer = new _apolloServerExpress.ApolloServer({
+  schema
+}); // app.use(path, jwtCheck);
+
+apolloServer.applyMiddleware({
+  app
+});
+/*
+Error
+*/
+
 app.use((req, res, next) => {
   const err = new Error('Not Found!');
   err.status = 404;

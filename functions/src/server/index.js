@@ -1,8 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import path from 'path';
+import { ApolloServer, makeExecutableSchema, gql } from 'apollo-server-express';
+import { merge } from 'lodash';
 
 import apiRoutes from './api';
+import { 
+  typeDef as Query, 
+  resolvers as queryResolvers,
+} from './graphql/query';
 
 /*
 Cors
@@ -24,6 +31,26 @@ app.use(logger('dev')); */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use('/api', apiRoutes);
+
+/*
+Apollo Server (GraphQL)
+*/
+const resolvers = {};
+
+const schema = makeExecutableSchema({
+  typeDefs: [Query],
+  resolvers: merge(resolvers, queryResolvers),
+});
+
+const apolloServer = new ApolloServer({ 
+  schema
+});
+// app.use(path, jwtCheck);
+apolloServer.applyMiddleware({ app });
+
+/*
+Error
+*/
 app.use((req, res, next) => {
   const err = new Error('Not Found!');
   err.status = 404;

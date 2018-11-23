@@ -22,12 +22,8 @@
     ],
     "rewrites": [
       {
-        "source":"/server/**", 
-        "function":"serverService"
-      },
-      {
         "source": "**",
-        "destination": "/index.html"
+        "function":"serverService"
       }
     ]
   },
